@@ -51,6 +51,7 @@ public class LitecartTesting {
     }
 
     @Test
+    @DisplayName("Task3: Sign on")
     public void Task3() {
         String text = " You are now logged in as admin";
         Boolean result = false;
@@ -65,8 +66,8 @@ public class LitecartTesting {
     }
 
     @Nested
-    @DisplayName("Menu")
-    class Menu {
+    @DisplayName("Task7: Sections of the administrative panel")
+    class Task7 {
         int menuCount;
         WebElement root;
 
