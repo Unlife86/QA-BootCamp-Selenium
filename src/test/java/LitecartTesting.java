@@ -9,8 +9,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -33,6 +35,11 @@ public class LitecartTesting {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    private DynamicTest _factory(final String str) {
+        String h1 = driver.findElement(By.cssSelector("#content h1")).getText();
+        return DynamicTest.dynamicTest(str, () -> assertEquals(str, h1));
     }
 
     @BeforeAll
@@ -71,16 +78,33 @@ public class LitecartTesting {
             assertTrue(menuCount == 17);
         }
 
-        @RepeatedTest(value = 17, name = "{displayName} {currentRepetition} of {totalRepetitions}")
-        @DisplayName("Link action")
-        public void Links(RepetitionInfo repetitionInfo) {
-            root = driver.findElement(By.id("box-apps-menu"));
-            try {
-                root.findElement(By.cssSelector("li#app-:nth-child(" + repetitionInfo.getCurrentRepetition() + ") > a")).click();
-            } catch (NoSuchElementException e){
-                System.out.println("root.getTagName()");
-            }
+        @TestFactory
+        @DisplayName("Links")
+        public Collection<DynamicTest> Links() {
+            int countI; int countJ;
+            String text;
+            List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
+            countI = driver.findElements(By.cssSelector("#box-apps-menu li#app- > a")).size();
+            if (countI > 0) {
+                for (int i = 1; i <= countI; i++) {
+                    driver.findElement(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > a")).click();
+                    countJ = driver.findElements(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > ul.docs li[id*=doc-]:not(.selected) > a")).size();
+                    if (countJ > 0) {
+                        dynamicTests.add(_factory(driver.findElement(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > ul.docs > li[id*=doc-].selected > a")).getText()));
+                        for (int j = 2; j <= countJ + 1; j++) {
+                            driver.findElement(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > ul.docs li[id*=doc-]:not(.selected):nth-child(" + j + ") > a")).click();
+                            dynamicTests.add(_factory(driver.findElement(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > ul.docs li[id*=doc-].selected > a")).getText()));
+                        }
+                    } else {
+                        text = driver.findElement(By.cssSelector("#box-apps-menu li#app-:nth-child(" + i + ") > a")).getText();
+                        dynamicTests.add(_factory(text));
+                    }
 
+                }
+                return dynamicTests;
+            }
+            dynamicTests.add(DynamicTest.dynamicTest("No such element", () -> assertTrue(false)));
+            return dynamicTests;
         }
 
     }
