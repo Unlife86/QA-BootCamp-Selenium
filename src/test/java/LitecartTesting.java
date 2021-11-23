@@ -20,6 +20,7 @@ public class LitecartTesting {
     private WebDriver driver;
     private WebDriverWait wait;
     private String litecart;
+    private int n =11;
 
     private void _login() {
         driver.get(litecart);
@@ -110,15 +111,32 @@ public class LitecartTesting {
 
     }
 
-    @RepeatedTest(value = 11, name = "{displayName} {currentRepetition} of {totalRepetitions} has sticker") //"#main > .middle > .content div[id^=box-].box ul.listing-wrapper.products > li.product.column.shadow.hover-light div.sticker.new"
-    @DisplayName("Task8: Product")
-    public void Task8(RepetitionInfo repetitionInfo) {
-        int i = repetitionInfo.getCurrentRepetition();
-        litecart = "http://localhost/litecart/en/";
-        driver.get(litecart);
-        List<WebElement> items = driver.findElements(By.cssSelector("#main > .middle > .content div[id^=box-].box  li.product.column.shadow.hover-light"));
-        assertEquals(1, items.get(i-1).findElements(By.className("sticker")).size());
+    /*@RepeatedTest(value = n, name = "{displayName} {currentRepetition} of {totalRepetitions} has sticker") //"#main > .middle > .content div[id^=box-].box ul.listing-wrapper.products > li.product.column.shadow.hover-light div.sticker.new"
+    @DisplayName("Task8: Product")*/
+    @Nested
+    @DisplayName("Task8: Products")
+    class Task8 {
+        private DynamicTest _stickers(final WebElement root, final String text) {
+            return DynamicTest.dynamicTest(text + ": " + root.findElement(By.className("link")).getAttribute("title") + "has only one sticker", () -> assertEquals(1, root.findElements(By.className("sticker")).size()));
+        }
+        @TestFactory
+        public Collection<DynamicTest> Stickers() {
+            litecart = "http://localhost/litecart/en/";
+            List<WebElement> items;
+            List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
+            driver.get(litecart);
+            List<WebElement> categories = driver.findElements(By.cssSelector("#main > .middle > .content div[id^=box-].box "));
+            for (WebElement category : categories) {
+                items = category.findElements(By.cssSelector("li.product.column.shadow.hover-light"));
+                for (WebElement item : items) {
+                    dynamicTests.add(_stickers(item,category.findElement(By.tagName("h3")).getText()));
+                }
+            }
+            return dynamicTests;
+        }
+
     }
+
 
     @AfterAll
     public void stop() {
