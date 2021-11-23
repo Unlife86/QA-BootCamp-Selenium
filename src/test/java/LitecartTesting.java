@@ -111,7 +111,7 @@ public class LitecartTesting {
     }
 
     @RepeatedTest(value = 11, name = "{displayName} {currentRepetition} of {totalRepetitions} has sticker") //"#main > .middle > .content div[id^=box-].box ul.listing-wrapper.products > li.product.column.shadow.hover-light div.sticker.new"
-    @DisplayName("Product")
+    @DisplayName("Task8: Product")
     public void Task8(RepetitionInfo repetitionInfo) {
         int i = repetitionInfo.getCurrentRepetition();
         litecart = "http://localhost/litecart/en/";
