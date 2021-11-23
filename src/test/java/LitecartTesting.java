@@ -110,6 +110,16 @@ public class LitecartTesting {
 
     }
 
+    @RepeatedTest(value = 11, name = "{displayName} {currentRepetition} of {totalRepetitions} has sticker") //"#main > .middle > .content div[id^=box-].box ul.listing-wrapper.products > li.product.column.shadow.hover-light div.sticker.new"
+    @DisplayName("Product")
+    public void Task8(RepetitionInfo repetitionInfo) {
+        int i = repetitionInfo.getCurrentRepetition();
+        litecart = "http://localhost/litecart/en/";
+        driver.get(litecart);
+        List<WebElement> items = driver.findElements(By.cssSelector("#main > .middle > .content div[id^=box-].box  li.product.column.shadow.hover-light"));
+        assertEquals(1, items.get(i-1).findElements(By.className("sticker")).size());
+    }
+
     @AfterAll
     public void stop() {
         driver.quit();
