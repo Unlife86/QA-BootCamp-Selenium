@@ -20,7 +20,6 @@ public class LitecartTesting {
     private WebDriver driver;
     private WebDriverWait wait;
     private String litecart;
-    private int n =11;
 
     private void _login() {
         driver.get(litecart);
@@ -136,7 +135,6 @@ public class LitecartTesting {
         }
 
     }
-
 
     @AfterAll
     public void stop() {

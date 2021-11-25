@@ -1,0 +1,135 @@
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayName("Task10: The product properties")
+public class Task10 {
+    private WebDriver driver;
+    private WebDriverWait wait;
+
+    private DynamicTest _factory(final String index, int i) {
+        List<String> prop = Arrays.asList(new String[]{"Name","Regular price", "Campaign price"});
+        List<String> productProp = Arrays.asList(new String[]{"title","regular-price", "campaign-price"});
+        return DynamicTest.dynamicTest(prop.get(i), () -> assertEquals(
+                index,
+                driver.findElement(By.cssSelector("#box-product ." + productProp.get(i))).getText()
+        ));
+    }
+
+    @BeforeAll
+    public void start() {
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        driver.get("http://localhost/litecart/en/");
+    }
+    @TestFactory
+    public Collection<DynamicTest> nameTest() {
+        List<String> productPropIndex = Arrays.asList(new String[]{"name","regular-price", "campaign-price"});
+        List<String> valPropProductIndex = new ArrayList<String>();
+        List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
+
+        for (int i = 0; i < 3; i++) {
+            valPropProductIndex.add(driver.findElement(By.cssSelector("#box-campaigns .product:first-child ." + productPropIndex.get(i))).getText());
+        }
+        driver.findElement(By.cssSelector("#box-campaigns .product:first-child .link")).click();
+        for (int i = 0; i < 3; i++) {
+            dynamicTests.add(_factory(valPropProductIndex.get(i),i));
+        }
+        return dynamicTests;
+    }
+    @Nested
+    @DisplayName("Task10: Prices on Index page")
+    class PriceIndex {
+        protected DynamicTest _style(final int i, final WebElement element) {
+            List<String> cssAttr = Arrays.asList(new String[]{"text-decoration-line", "font-weight"});
+            List<String> cssAttrVal = Arrays.asList(new String[]{"line-through", "700"});
+            return DynamicTest.dynamicTest("Style text." + element.getAttribute("class"), () -> assertEquals(
+                    cssAttrVal.get(i),
+                    element.getCssValue(cssAttr.get(i))
+            ));
+        }
+        protected DynamicTest _color(final int i, final String val, final String text) {
+            List<String> color = Arrays.asList(new String[]{
+                    String.format(
+                            "^%s,%s,%s,",
+                            val.split(",")[0],
+                            val.split(",")[0],
+                            val.split(",")[0]
+                    ),
+                    "^\\d{1,3},0,0,"
+            });
+            Pattern pattern = Pattern.compile(color.get(i));
+            Matcher matcher = pattern.matcher(val);
+            System.out.println(val);
+            return DynamicTest.dynamicTest("Color text."+ text, () -> assertTrue(matcher.find()));
+        }
+        protected List<WebElement> getPrices() {
+            List<WebElement> prices = new ArrayList<WebElement>();
+            if (driver.getCurrentUrl() != "http://localhost/litecart/en/") {
+                driver.get("http://localhost/litecart/en/");
+            }
+            prices.add(driver.findElement(By.cssSelector("#box-campaigns .product:first-child .regular-price")));
+            prices.add(driver.findElement(By.cssSelector("#box-campaigns .product:first-child .campaign-price")));
+            return prices;
+        }
+        @TestFactory
+        public Collection<DynamicTest> priceTest() {
+            List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
+            List<WebElement> prices = getPrices();
+            for (int i = 0; i < 2; i++) {
+                dynamicTests.add(_style(i, prices.get(i)));
+                dynamicTests.add(_color(i,
+                        prices.get(i).getCssValue("color").replaceAll("[^0-9,]", ""),
+                        prices.get(i).getAttribute("class"))
+                );
+            }
+
+            return dynamicTests;
+        }
+
+        @Test
+        public void regularAndCampaignTextSizePrice() {
+            List<WebElement> prices = new ArrayList<WebElement>();
+            prices = getPrices();
+            float regPriceTextSize = Float.parseFloat(prices.get(0).getCssValue("font-size").replaceAll("[^0-9.,]", ""));
+            float campPriceTextSize = Float.parseFloat(prices.get(1).getCssValue("font-size").replaceAll("[^0-9.,]", ""));
+            if ("http://localhost/litecart/en/".equals(driver.getCurrentUrl())) {
+                System.out.println("Hi");
+            }
+            assertTrue(regPriceTextSize < campPriceTextSize);
+        }
+    }
+
+    @Nested
+    @DisplayName("Task10: Prices on Product page")
+    class PriceProduct extends PriceIndex {
+        @Override
+        protected List<WebElement> getPrices() {
+            List<WebElement> prices = new ArrayList<WebElement>();
+            if ("http://localhost/litecart/en/".equals(driver.getCurrentUrl())) {
+                driver.findElement(By.cssSelector("#box-campaigns .product:first-child .link")).click();
+            }
+            prices.add(driver.findElement(By.cssSelector("#box-product .regular-price")));
+            prices.add(driver.findElement(By.cssSelector("#box-product .campaign-price")));
+            return prices;
+        }
+    }
+
+    @AfterAll
+    public void stop() {
+        driver.quit();
+        driver = null;
+    }
+}
