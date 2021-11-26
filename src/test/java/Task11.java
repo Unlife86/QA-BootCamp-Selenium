@@ -81,8 +81,4 @@ public class Task11 extends Testt {
         driver.findElement(By.id("box-account")).findElement(By.linkText("Logout")).click();
 
     }
-
-    @Override
-    public void stop() {
-    }
 }
