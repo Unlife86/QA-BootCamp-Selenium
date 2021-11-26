@@ -1,28 +1,18 @@
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(Lifecycle.PER_CLASS)
-public class LitecartTesting {
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private String litecart;
+public class LitecartTesting extends Testt {
 
     private void _login() {
-        driver.get(litecart);
+        driver.get(baseURL);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
@@ -40,14 +30,6 @@ public class LitecartTesting {
     private DynamicTest _factory(final String str) {
         String h1 = driver.findElement(By.cssSelector("#content h1")).getText();
         return DynamicTest.dynamicTest(str, () -> assertEquals(str, h1));
-    }
-
-    @BeforeAll
-    public void start() {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        litecart = "http://localhost/litecart/admin/";
     }
 
     @Test
@@ -110,20 +92,20 @@ public class LitecartTesting {
 
     }
 
-    /*@RepeatedTest(value = n, name = "{displayName} {currentRepetition} of {totalRepetitions} has sticker") //"#main > .middle > .content div[id^=box-].box ul.listing-wrapper.products > li.product.column.shadow.hover-light div.sticker.new"
-    @DisplayName("Task8: Product")*/
     @Nested
     @DisplayName("Task8: Products")
     class Task8 {
         private DynamicTest _stickers(final WebElement root, final String text) {
-            return DynamicTest.dynamicTest(text + ": " + root.findElement(By.className("link")).getAttribute("title") + "has only one sticker", () -> assertEquals(1, root.findElements(By.className("sticker")).size()));
+            return DynamicTest.dynamicTest(
+                    text + ": " + root.findElement(By.className("link")).getAttribute("title") + "has only one sticker",
+                    () -> assertEquals(1, root.findElements(By.className("sticker")).size())
+            );
         }
         @TestFactory
         public Collection<DynamicTest> Stickers() {
-            litecart = "http://localhost/litecart/en/";
             List<WebElement> items;
             List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
-            driver.get(litecart);
+            driver.get(LitecartTesting.this.baseURL);
             List<WebElement> categories = driver.findElements(By.cssSelector("#main > .middle > .content div[id^=box-].box "));
             for (WebElement category : categories) {
                 items = category.findElements(By.cssSelector("li.product.column.shadow.hover-light"));
@@ -134,12 +116,6 @@ public class LitecartTesting {
             return dynamicTests;
         }
 
-    }
-
-    @AfterAll
-    public void stop() {
-        driver.quit();
-        driver = null;
     }
 }
 

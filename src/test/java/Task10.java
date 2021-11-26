@@ -13,11 +13,12 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Task10: The product properties")
-public class Task10 {
-    private WebDriver driver;
-    private WebDriverWait wait;
+public class Task10 extends Testt {
+
+    public Task10() {
+        baseURL = "http://localhost/litecart/en/";
+    }
 
     private DynamicTest _factory(final String index, int i) {
         List<String> prop = Arrays.asList(new String[]{"Name","Regular price", "Campaign price"});
@@ -27,13 +28,7 @@ public class Task10 {
                 driver.findElement(By.cssSelector("#box-product ." + productProp.get(i))).getText()
         ));
     }
-
-    @BeforeAll
-    public void start() {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-        driver.get("http://localhost/litecart/en/");
-    }
+    
     @TestFactory
     public Collection<DynamicTest> nameTest() {
         List<String> productPropIndex = Arrays.asList(new String[]{"name","regular-price", "campaign-price"});
@@ -77,8 +72,8 @@ public class Task10 {
         }
         protected List<WebElement> getPrices() {
             List<WebElement> prices = new ArrayList<WebElement>();
-            if (driver.getCurrentUrl() != "http://localhost/litecart/en/") {
-                driver.get("http://localhost/litecart/en/");
+            if (driver.getCurrentUrl() != Task10.this.baseURL) {
+                driver.get(Task10.this.baseURL);
             }
             prices.add(driver.findElement(By.cssSelector("#box-campaigns .product:first-child .regular-price")));
             prices.add(driver.findElement(By.cssSelector("#box-campaigns .product:first-child .campaign-price")));
@@ -105,7 +100,7 @@ public class Task10 {
             prices = getPrices();
             float regPriceTextSize = Float.parseFloat(prices.get(0).getCssValue("font-size").replaceAll("[^0-9.,]", ""));
             float campPriceTextSize = Float.parseFloat(prices.get(1).getCssValue("font-size").replaceAll("[^0-9.,]", ""));
-            if ("http://localhost/litecart/en/".equals(driver.getCurrentUrl())) {
+            if (Task10.this.baseURL.equals(driver.getCurrentUrl())) {
                 System.out.println("Hi");
             }
             assertTrue(regPriceTextSize < campPriceTextSize);
@@ -118,18 +113,12 @@ public class Task10 {
         @Override
         protected List<WebElement> getPrices() {
             List<WebElement> prices = new ArrayList<WebElement>();
-            if ("http://localhost/litecart/en/".equals(driver.getCurrentUrl())) {
+            if (Task10.this.baseURL.equals(driver.getCurrentUrl())) {
                 driver.findElement(By.cssSelector("#box-campaigns .product:first-child .link")).click();
             }
             prices.add(driver.findElement(By.cssSelector("#box-product .regular-price")));
             prices.add(driver.findElement(By.cssSelector("#box-product .campaign-price")));
             return prices;
         }
-    }
-
-    @AfterAll
-    public void stop() {
-        driver.quit();
-        driver = null;
     }
 }
