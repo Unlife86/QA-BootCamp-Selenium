@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -7,6 +9,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Task11 extends Testt {
+    private List<String> values = Arrays.asList(new String[]{
+            "TaxID",
+            "My Company",
+            "MyFirstName",
+            "MyLastName",
+            "My Address1",
+            "My Address2",
+            "12345",
+            "My City",
+            "test@test.com",
+            "+19876543214",
+            "12345"
+    });
     public Task11() {
         baseURL = "http://localhost/litecart/en/";
     }
@@ -16,19 +31,6 @@ public class Task11 extends Testt {
         Select country_code;
         Select zone_code;
         int i = 0;
-        List<String> values = Arrays.asList(new String[]{
-                "TaxID",
-                "My Company",
-                "MyFirstName",
-                "MyLastName",
-                "My Address1",
-                "My Address2",
-                "12345",
-                "My City",
-                "test@test.com",
-                "+19876543214",
-                "12345"
-        });
 
         driver.get(baseURL);
         driver.findElement(By.id("box-account-login")).findElement(By.linkText("New customers click here")).click();
@@ -80,5 +82,19 @@ public class Task11 extends Testt {
         driver.findElement(By.id("box-account-login")).findElement(By.cssSelector("button[name=login]")).click();
         driver.findElement(By.id("box-account")).findElement(By.linkText("Logout")).click();
 
+    }
+
+    @Override
+    @AfterAll
+    public void stop() {
+        driver.get("http://localhost/litecart/admin/");
+        driver.findElement(By.name("username")).sendKeys("admin");
+        driver.findElement(By.name("password")).sendKeys("admin");
+        driver.findElement(By.name("login")).click();
+        driver.findElement(By.id("box-apps-menu")).findElement(By.linkText("Customers")).click();
+        driver.findElement(By.name("customers_form")).findElement(By.linkText(values.get(2) + " " + values.get(3))).click();
+        driver.findElement(By.name("customer_form")).findElement(By.name("delete")).click();
+        driver.switchTo().alert().accept();
+        super.stop();
     }
 }
