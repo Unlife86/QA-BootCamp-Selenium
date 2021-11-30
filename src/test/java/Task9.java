@@ -18,7 +18,7 @@ public class Task9 extends Testt {
 
     private void _go() {
         driver.get(baseURL);
-        if (!driver.getCurrentUrl().contains("http://localhost/litecart/admin/login.php?")) {
+        if (driver.getCurrentUrl().contains("http://localhost/litecart/admin/login.php?")) {
             driver.findElement(By.name("username")).sendKeys("admin");
             driver.findElement(By.name("password")).sendKeys("admin");
             driver.findElement(By.name("login")).click();
