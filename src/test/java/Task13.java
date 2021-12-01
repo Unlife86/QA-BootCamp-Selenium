@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.Select;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -18,19 +20,27 @@ public class Task13 extends Testt {
     public Task13() {
         baseURL = "http://localhost/litecart/en/";
     }
+
+    private By table = By.cssSelector("table.dataTable") ;
+
     private int _getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
-    @RepeatedTest(value = 3, name= "{displayName}: {currentRepetition} of {totalRepetitions}")
-    @DisplayName("Attempt to add a product")
-    @Order(1)
-    public void cartAddProduct(RepetitionInfo repetitionInfo) {
+    private void _goToProductPage() {
+        _goToProductPage(_getRandomNumber(0,driver.findElements(By.cssSelector(".product")).size()));
+    }
+
+    private void _goToProductPage(int i) {
+        _goToProductPage(driver.findElements(By.cssSelector(".product")).get(i));
+    }
+
+    private void _goToProductPage(WebElement product) {
+        product.findElement(By.cssSelector("a.link")).click();
+    }
+
+    private void _cartAddProduct() {
         Select options_size;
-        Alert alert;
-        driver.get(baseURL);
-        List<WebElement> products = driver.findElements(By.cssSelector(".product"));
-        products.get(_getRandomNumber(0,products.size())).findElement(By.cssSelector("a.link")).click();
         try {
             options_size = new Select(driver.findElement(By.name("options[Size]")));
             options_size.selectByIndex(_getRandomNumber(
@@ -40,48 +50,62 @@ public class Task13 extends Testt {
         } catch (NoSuchElementException e) {
         } finally {
             driver.findElement(By.name("add_cart_product")).click();
-            alert = wait.until(alertIsPresent());
-            if (alert != null) {
-                alert.accept();
-                driver.navigate().refresh();
-                assertEquals(repetitionInfo.getCurrentRepetition(),Integer.parseInt(driver.findElement(By.cssSelector("#cart .content .quantity")).getText()));
-            } else {
-                assertTrue(wait.until(textToBePresentInElement(
-                        driver.findElement(By.cssSelector("#cart .content .quantity")),
-                        String.valueOf(repetitionInfo.getCurrentRepetition())
-                )));
-            }
-
+            wait.until(alertIsPresent()).accept();
         }
-
-
     }
 
     @RepeatedTest(value = 3, name= "{displayName}: {currentRepetition} of {totalRepetitions}")
-    @DisplayName("Attempt to delete a product")
+    @DisplayName("Attempt to add a product")
+    @Order(1)
+    public void cartAddProduct(RepetitionInfo repetitionInfo) {
+        driver.get(baseURL);
+        _goToProductPage();
+        _cartAddProduct();
+        assertTrue(wait.until(textToBePresentInElement(
+                driver.findElement(By.cssSelector("#cart .content .quantity")),
+                String.valueOf(repetitionInfo.getCurrentRepetition())
+        )));
+    }
+
+
+    @TestFactory
     @Order(2)
-    public void cartDelProduct(RepetitionInfo repetitionInfo) {
-        WebElement table;
-        if (repetitionInfo.getCurrentRepetition() == 1) {
-            driver.get(baseURL);
-            if (Integer.parseInt(driver.findElement(By.cssSelector("#cart .content .quantity")).getText()) == 0) {
-                assertTrue(false);
+    public Collection<DynamicTest> cartDelProduct() {
+        List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
+        driver.get(baseURL);
+        int count = Integer.parseInt(driver.findElement(By.cssSelector("#cart .content .quantity")).getText());
+        if (count == 0) {
+            for (int i = 0; i < 3; i++) {
+                _goToProductPage();
+                _cartAddProduct();
+                driver.navigate().back();
             }
-            driver.findElement(By.cssSelector("#cart .link")).click();
+            count = Integer.parseInt(driver.findElement(By.cssSelector("#cart .content .quantity")).getText());
         }
-        table = driver.findElement(By.cssSelector("table.dataTable"));
-        driver.findElement(By.name("remove_cart_item")).click();
-        if (wait.until(stalenessOf(table))) {
-            table = null;
-            table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.dataTable")));
-            if (table == null) {
-                table = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath(".//*[@id='checkout-cart-wrapper']//em")
+        driver.findElement(By.cssSelector("#cart .link")).click();
+
+        int i = 1;
+        while (count - i > 0) {
+            WebElement table = driver.findElement(this.table);
+            driver.findElement(By.name("remove_cart_item")).click();
+            if (wait.until(stalenessOf(table))) {
+                dynamicTests.add(DynamicTest.dynamicTest(
+                        String.format("Attempt to delete a product %s of %s",i,count),
+                        () -> assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(this.table)) instanceof WebElement)
+                ));
+            } else {
+                dynamicTests.add(DynamicTest.dynamicTest(
+                        String.format("Attempt to delete a product %s of %s",i,count),
+                        () -> assertTrue(false)
                 ));
             }
-            assertTrue(table instanceof WebElement);
-        } else {
-            assertTrue(false);
+            i++;
         }
+        driver.findElement(By.name("remove_cart_item")).click();
+        dynamicTests.add(DynamicTest.dynamicTest(
+                String.format("Attempt to delete a product %s of %s",count,count),
+                () -> assertTrue(wait.until(stalenessOf(driver.findElement(this.table))))
+        ));
+        return dynamicTests;
     }
 }
