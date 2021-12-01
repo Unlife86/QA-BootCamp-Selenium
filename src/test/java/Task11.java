@@ -15,19 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Task11 extends Testt {
-    private Map<String,String> values /*= Arrays.asList(new String[]{
-            "TaxID",
-            "My Company",
-            "MyFirstName",
-            "MyLastName",
-            "My Address1",
-            "My Address2",
-            "12345",
-            "My City",
-            "test@test.com",
-            "+19876543214",
-            "12345"
-    })*/;
+    private Map<String,String> values;
     private MockNeat mock = MockNeat.old();
     public Task11() {
         baseURL = "http://localhost/litecart/en/";
