@@ -76,17 +76,14 @@ public class Task11 extends Testt {
     public void createNewCustomer() {
         Select country_code;
         Select zone_code;
-        int i = 0;
 
         driver.get(baseURL);
         driver.findElement(By.id("box-account-login")).findElement(By.linkText("New customers click here")).click();
         _setOption(driver.findElement(By.name("customer_form")).findElement(By.name("country_code")),"United States");
 
         for (WebElement input : driver.findElement(By.name("customer_form")).findElements(By.cssSelector("input:not([type=hidden]):not([type=checkbox]):not([name=tax_id])"))) {
-            if (!"checkbox".equals(input.getAttribute("type"))) {
-                input.clear();
-                input.sendKeys(values.get(input.getAttribute("name")));
-            }
+            input.clear();
+            input.sendKeys(values.get(input.getAttribute("name")));
         }
         driver.findElement(By.name("newsletter")).click();
 
