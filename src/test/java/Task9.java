@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class Task9 extends Testt {
 
     public Task9() {
@@ -25,7 +26,7 @@ public class Task9 extends Testt {
         }
     }
     private boolean _isSorted(List<String> list) {
-        List<String> sortedList = list.subList(0,list.size());
+        List<String> sortedList = ((List) ((ArrayList) list).clone());
         sortedList.sort(Comparator.naturalOrder());
         return list.equals(sortedList);
     }
@@ -39,6 +40,7 @@ public class Task9 extends Testt {
             }
             if (condition) {
                 hrefsZone.add(link.getAttribute("href"));
+                condition = false;
             }
         }
         subTaskCountriesIsPassed = _isSorted(countries);
@@ -71,6 +73,7 @@ public class Task9 extends Testt {
     //Проверяем, что страны расположенные в алфавитном порядке
     @DisplayName("Checking the list of countries")
     @Test
+    @Order(1)
     public void subTaskCountries() {
         baseURL = "http://localhost/litecart/admin/?app=countries&doc=countries";
         _go();
@@ -79,28 +82,41 @@ public class Task9 extends Testt {
     }
 
     @Nested
+    @Order(2)
     @DisplayName("Task9: Checking list of zones on Country page")
-    class Zones {
+    class SubTask1OfTask9 {
+        @BeforeEach
+        private void start() {
+            if (Task9.this.hrefsZone.size() == 0) {
+                Task9.this.hrefsZone.add("http://localhost/litecart/admin/?app=countries&doc=edit_country&country_code=CA");
+                Task9.this.hrefsZone.add("http://localhost/litecart/admin/?app=countries&doc=edit_country&country_code=US");
+            }
+            _go();
+        }
         //Проверяем, что зоны страны расположены в алфовитном порядке
         @TestFactory
         public Collection<DynamicTest> subTaskZones() {
-            return _zones("//input[contains(@name,'][name]') and @type='hidden']/..");
+            return Task9.this._zones("//input[contains(@name,'][name]') and @type='hidden']/..");
         }
     }
 
     @Nested
+    @Order(3)
     @DisplayName("SubTask2: Checking list of zones on Country page")
-    class SubTask2OfTask9 extends Zones {
-        @Override
-        @TestFactory
-        public Collection<DynamicTest> subTaskZones() {
+    class SubTask2OfTask9 {
+        @BeforeEach
+        private void start() {
+            Task9.this.hrefsZone.clear();
             baseURL = "http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones";
             Task9.this._go();
+        }
+        @TestFactory
+        public Collection<DynamicTest> subTaskZones() {
             Task9.this._countries(
                     "?app=geo_zones&doc=edit_geo_zone&page=1&geo_zone_id=",
                     true
             );
-            return _zones("//select[contains(@name,'zone_code')]//option[@selected='selected']");
+            return Task9.this._zones("//select[contains(@name,'zone_code')]//option[@selected='selected']");
         }
     }
 
