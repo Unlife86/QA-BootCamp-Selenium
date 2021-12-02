@@ -56,6 +56,7 @@ public class Task9 extends Testt {
             return dynamicTests;
         }
         for (String href : this.hrefsZone) {
+            zones.clear();
             driver.get(href);
             for (WebElement link : driver.findElements(
                     By.xpath(path)
