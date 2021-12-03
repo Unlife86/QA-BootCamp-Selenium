@@ -1,5 +1,6 @@
  {
-    "Status":",../label/input",
+    "root":".//*[@id=\"tab-general\"]/table/tbody/tr/td/strong/",
+     "Status":",../label/input",
     "Name":",../span/input",
     "Code":"../input",
     "Categories":"..//input[@data-name='Rubber Ducks']",
