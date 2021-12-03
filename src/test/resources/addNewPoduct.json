@@ -1,0 +1,13 @@
+ {
+    "Status":",../label/input",
+    "Name":",../span/input",
+    "Code":"../input",
+    "Categories":"..//input[@data-name='Rubber Ducks']",
+    "Default Category":"../select[@name='default_category_id']",
+    "Product Groups":"..//table//input[contains(@name,'product_groups')]",
+    "Quantity":"../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]",
+    "Quantity Unit":"../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]",
+    "Delivery Status":"../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']",
+    "Sold Out Status":"../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']",
+    "Upload Images":"..//input[contains(@name,'new_images')]"
+ }
