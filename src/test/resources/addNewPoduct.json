@@ -1,5 +1,5 @@
  {
-    "root":".//*[@id=\"tab-general\"]/table/tbody/tr/td/strong/",
+    "root":".//*[@id='tab-general']/table/tbody/tr/td/strong/",
      "Status":",../label/input",
     "Name":",../span/input",
     "Code":"../input",
