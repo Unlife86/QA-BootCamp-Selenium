@@ -18,7 +18,7 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Task13 extends Testt {
     public Task13() {
-        baseURL = "http://localhost/litecart/en/";
+        baseURL = "https://litecart.stqa.ru/en/";
     }
 
     private By table = By.cssSelector("table.dataTable") ;
@@ -50,7 +50,7 @@ public class Task13 extends Testt {
         } catch (NoSuchElementException e) {
         } finally {
             driver.findElement(By.name("add_cart_product")).click();
-            wait.until(alertIsPresent()).accept();
+            //wait.until(alertIsPresent()).accept();
         }
     }
 
