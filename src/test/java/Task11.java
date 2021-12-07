@@ -1,6 +1,5 @@
 import com.google.gson.Gson;
 import net.andreinc.mockneat.MockNeat;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +9,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class Task11 extends Testt {
@@ -39,29 +36,6 @@ public class Task11 extends Testt {
                 Map.class
         );
 
-    }
-
-    private int _getIndexOptionByText(List<WebElement> options, String text) {
-        int i = 0;
-        for (WebElement option : options) {
-            if (text.equals(option.getText())) {
-                return i;
-            } else {
-                i++;
-            }
-        }
-        return -1;
-    }
-
-    private void _setOption(WebElement element, String optionText) {
-        Select select;
-        select = new Select(element);
-        String js = "arguments[0].selectedIndex = " + _getIndexOptionByText(select.getOptions(),optionText) + "; arguments[0].dispatchEvent(new Event('change'))";
-        try {
-            select.selectByVisibleText(optionText);
-        } catch (ElementNotInteractableException e) {
-            ((JavascriptExecutor) driver).executeScript(js,select);
-        }
     }
 
     @Override

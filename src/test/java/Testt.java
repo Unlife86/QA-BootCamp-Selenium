@@ -5,10 +5,9 @@ import com.google.gson.JsonParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.FileNotFoundException;
@@ -53,30 +52,43 @@ public class Testt {
         return (new Gson()).fromJson(((JsonObject) tree).get(key),Map.class);
     }
 
-    protected void _actionElement(WebElement root, Map<String,String> map) {
-        By by = By.xpath(map.get("xpath"));
-        List<WebElement> elements = root.findElements(by);
-        if (elements.size() == 1) {
-            switch (elements.get(0).getAttribute("type")) {
-                case "input":
-                    _actionElement(elements.get(0),map.get("value"));
-                    break;
-                case "checkbox":
-                case "radio":
-                    _actionElement(elements.get(0));
-                    break;
-            }
-        } else if (elements.size() > 1) {
-            for (WebElement element : elements) {
-                element.getText();
-            }
+    protected void _setOption(WebElement element, String optionText) {
+        Select select;
+        select = new Select(element);
+        String js = "arguments[0].selectedIndex = " + _getIndexOptionByText(select.getOptions(),optionText) + "; arguments[0].dispatchEvent(new Event('change'))";
+        try {
+            select.selectByVisibleText(optionText);
+        } catch (ElementNotInteractableException e) {
+            ((JavascriptExecutor) driver).executeScript(js,select);
         }
     }
-    protected void _actionElement(WebElement element) {
-        if (element.getAttribute("checked").equals("false")) element.click();
+
+    protected void _setOption(WebElement element) {
+        Select select;
+        select = new Select(element);
+        Integer index = _getRandomNumber(1,select.getOptions().size()) - 1;
+        String js = "arguments[0].selectedIndex = " + index + "; arguments[0].dispatchEvent(new Event('change'))";
+        try {
+            select.selectByIndex(index);
+        } catch (ElementNotInteractableException e) {
+            ((JavascriptExecutor) driver).executeScript(js,select);
+        }
     }
-    protected void _actionElement(WebElement element, String string) {
-        element.sendKeys(string);
+
+    private int _getIndexOptionByText(List<WebElement> options, String text) {
+        int i = 0;
+        for (WebElement option : options) {
+            if (text.equals(option.getText())) {
+                return i;
+            } else {
+                i++;
+            }
+        }
+        return -1;
+    }
+
+    protected int _getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
 }

@@ -1,19 +1,38 @@
- {
-     "General": {
-        "root":{"xpath":".//*[@id='tab-general']/table/tbody/tr/td/strong"},
-         "Status":{"xpath": "../label/input","value": "Enabled"},
-         "Name":{"xpath": "../span/input","value": "My Duck"},
-         "Code":{"xpath": "../input","value": "rd50"},
-         "Categories":{"xpath": "..//input[@data-name='Rubber Ducks']","value": "Rubber Ducks"},
-         "Default Category":{"xpath": "../select[@name='default_category_id']","value": "Rubber Ducks"},
-         "Product Groups":{"xpath": "..//table//input[contains(@name,'product_groups')]","value": ""},
-         "Quantity":{"xpath": "../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]","value": "30,00"},
-         "Quantity Unit":{"xpath": "../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]","value": ""},
-         "Delivery Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']","value": ""},
-         "Sold Out Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']","value": ""},
-         "Upload Images":{"xpath": "..//input[contains(@name,'new_images')]","value": ""}
-      },
-      "Information": {
-        "root":".//*[@id='tab-information']/table/tbody/tr/td/strong/"
-      }
- }
+{
+  "General": {
+    "root":{"xpath":".//*[@id='tab-general']/table/tbody/tr/td/strong"},
+    "Status":{"xpath": "../label","value": "Enabled"},
+    "Name":{"xpath": "../span/input","value": "My Duck"},
+    "Code":{"xpath": "../input","value": "rd50"},
+    "Categories":{"xpath": "..//input[@data-name='Rubber Ducks']","value": "Rubber Ducks"},
+    "Default Category":{"xpath": "../select[@name='default_category_id']","value": "Rubber Ducks"},
+    "Product Groups":{"xpath": "..//table//input[contains(@name,'product_groups')]","value": ""},
+    "Quantity":{"xpath": "../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]","value": "30,00"},
+    "Quantity Unit":{"xpath": "../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]","value": ""},
+    "Delivery Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']","value": ""},
+    "Sold Out Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']","value": ""},
+    "Upload Images":{"xpath": "..//input[contains(@name,'new_images')]","value": "src/test/resources/skull.png"},
+    "Date Valid From": {"xpath": "..//input[contains(@name,'date_valid_from')]","js": "document.querySelector('input[type=\"date\"][name=date_valid_from]').value = '%s'", "value": "1"},
+    "Date Valid To": {"xpath": "..//input[contains(@name,'date_valid_to')]","js": "document.querySelector('input[type=\"date\"][name=date_valid_to]').value = '%s'", "value": "31"}
+  },
+  "Information": {
+    "root":{"xpath":".//*[@id='tab-information']/table/tbody/tr/td/strong"},
+    "Manufacturer": {"xpath": "..//select[@name='manufacturer_id']","value": ""},
+    "Supplier": {"xpath": "..//select[@name='manufacturer_id']","value": ""},
+    "Keywords": {"xpath": "../input","value": "duck, skull"},
+    "Short Description":{
+      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sollicitudin ante massa, eget ornare libero porta congue.",
+      "xpath": "..//input[@name='short_description[en]']"
+    },
+    "Description": {
+      "xpath": "..//div[contains(concat(\" \",normalize-space(@class),\" \"),\" trumbowyg-editor \")]",
+      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sollicitudin ante massa, eget ornare libero porta congue. Cras scelerisque dui non consequat sollicitudin. Sed pretium tortor ac auctor molestie. Nulla facilisi. Maecenas pulvinar nibh vitae lectus vehicula semper. Donec et aliquet velit. Curabitur non ullamcorper mauris. In hac habitasse platea dictumst. Phasellus ut pretium justo, sit amet bibendum urna. Maecenas sit amet arcu pulvinar, facilisis quam at, viverra nisi. Morbi sit amet adipiscing ante. Integer imperdiet volutpat ante, sed venenatis urna volutpat a. Proin justo massa, convallis vitae consectetur sit amet, facilisis id libero."},
+    "Head Title": {"xpath": "..//input[@name='head_title[en]']","value": "Head Title"},
+    "Meta Description": {"xpath": "..//input[@name='meta_description[en]']","value": "Meta Description"}
+  },
+  "Prices": {
+    "root":{"xpath":".//*[@id='tab-prices']/table/tbody/tr/td/strong"},
+    "Purchase Price": {"xpath":"..//*[contains(@name,'purchase_price')]", "value": "14,00"},
+    "Tax Class" : {"xpath": "..//input[@name='tax_class_id']", "value": ""}
+  }
+}

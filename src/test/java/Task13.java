@@ -23,9 +23,7 @@ public class Task13 extends Testt {
 
     private By table = By.cssSelector("table.dataTable") ;
 
-    private int _getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
+
 
     private void _goToProductPage() {
         _goToProductPage(_getRandomNumber(0,driver.findElements(By.cssSelector(".product")).size()));
