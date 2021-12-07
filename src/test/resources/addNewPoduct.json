@@ -1,14 +1,19 @@
  {
-     "root":".//*[@id='tab-general']/table/tbody/tr/td/strong/",
-     "Status":",../label/input",
-     "Name":",../span/input",
-     "Code":"../input",
-     "Categories":"..//input[@data-name='Rubber Ducks']",
-     "Default Category":"../select[@name='default_category_id']",
-     "Product Groups":"..//table//input[contains(@name,'product_groups')]",
-     "Quantity":"../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]",
-     "Quantity Unit":"../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]",
-     "Delivery Status":"../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']",
-     "Sold Out Status":"../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']",
-     "Upload Images":"..//input[contains(@name,'new_images')]"
+     "General": {
+        "root":{"xpath":".//*[@id='tab-general']/table/tbody/tr/td/strong"},
+         "Status":{"xpath": "../label/input","value": "Enabled"},
+         "Name":{"xpath": "../span/input","value": "My Duck"},
+         "Code":{"xpath": "../input","value": "rd50"},
+         "Categories":{"xpath": "..//input[@data-name='Rubber Ducks']","value": "Rubber Ducks"},
+         "Default Category":{"xpath": "../select[@name='default_category_id']","value": "Rubber Ducks"},
+         "Product Groups":{"xpath": "..//table//input[contains(@name,'product_groups')]","value": ""},
+         "Quantity":{"xpath": "../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]","value": "30,00"},
+         "Quantity Unit":{"xpath": "../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]","value": ""},
+         "Delivery Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']","value": ""},
+         "Sold Out Status":{"xpath": "../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']","value": ""},
+         "Upload Images":{"xpath": "..//input[contains(@name,'new_images')]","value": ""}
+      },
+      "Information": {
+        "root":".//*[@id='tab-information']/table/tbody/tr/td/strong/"
+      }
  }

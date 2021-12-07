@@ -1,7 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -9,44 +5,23 @@ import org.openqa.selenium.WebElement;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Task12 extends Testt {
-    private Map<String,Map<String,String>> tabsFields;
-    /*private MockNeat mock = MockNeat.old();*/
+    private Map<String,Map<String,Map<String,String>>> tabsFields = new HashMap<String,Map<String,Map<String,String>>>();
 
-    public Task12() {
+    public Task12() throws FileNotFoundException, IOException {
         baseURL = "http://localhost/litecart/admin/?app=catalog&doc=catalog";
-        for (String tab : Arrays.asList(new String[]{"General","Information", "Prices"})) {
-            tabsFields.put(
-                    tab,
-                    (new Gson()).fromJson(
-                            String.format(
-                                    "{'Status':'%s','Name':'../span/input','Code':'%s','Categories':'%s','Default Category':'%s','Product Groups':'%s','Quantity':'%s','Quantity Unit':'%s','Delivery Status':'%s','Sold Out Status':'%s','Upload Images':'%s'}",
-                                    "../label/input",
-                                    "../input",
-                                    "..//input[@data-name='Rubber Ducks']",
-                                    "../select[@name='default_category_id']",
-                                    "..//table//input[contains(@name,'product_groups')]",
-                                    "../../following-sibling::*[1]/self::tr//input[contains(@name,'quantity')]",
-                                    "../../following-sibling::*[1]/self::tr//select[contains(@name,'quantity')]",
-                                    "../../following-sibling::*[1]/self::tr//select[@name='delivery_status_id']",
-                                    "../../following-sibling::*[1]/self::tr//select[@name='sold_out_status_id']",
-                                    "..//input[contains(@name,'new_images')]"
-                            ),
-                            Map.class
-                    )
-            );
+        //_gson("General", "src/test/resources/addNewPoduct.json");
+        for (String tab : Arrays.asList(new String[]{"General"/*,"Information", "Prices"*/})) {
+            tabsFields.put(tab,_gson(tab, "src/test/resources/addNewPoduct.json"));
         }
     }
 
@@ -71,29 +46,21 @@ public class Task12 extends Testt {
             }
         }
         assertTrue(wait.until(titleContains("Add New Product | My Store")));
+        _fillFields();
     }
 
     private void _fillFields() {
-
-    }
-
-    private void gson() throws FileNotFoundException, IOException {
-        Map<String,String> map = new HashMap<>();
-
-        String fileName = "src/test/resources/addNewPoduct.json";
-        Path path = Paths.get(fileName);
-
-        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            JsonParser parser = new JsonParser();
-            JsonElement tree = parser.parse(reader);
-            (new Gson()).fromJson(tree,Map.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        WebElement field;
+        WebElement root = driver.findElement(By.cssSelector("div.tabs"));
+        root = root.findElement(By.cssSelector("ul.index"));
+        for (Map.Entry<String, Map<String,Map<String,String>>> entry : tabsFields.entrySet()) {
+            root.findElement(By.linkText(entry.getKey())).click();
+            if (entry.getValue() != null) {
+                for (WebElement strong : driver.findElements(By.xpath( entry.getValue().get("root").get("xpath") ))) {
+                    _actionElement(strong,entry.getValue().get(strong.getText()));
+                }
+            }
         }
-    }
-
-    public void canAddProduct() {
-
     }
 
 
