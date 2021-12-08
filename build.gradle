@@ -20,6 +20,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    //maxParallelForks = 10
 }
 
 tasks.withType(JavaCompile) {
