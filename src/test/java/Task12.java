@@ -1,7 +1,7 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,15 +14,15 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Task12 extends Testt {
     private Map<String,Map<String,Map<String,String>>> tabsFields = new HashMap<String,Map<String,Map<String,String>>>();
 
     public Task12() throws FileNotFoundException, IOException {
         baseURL = "http://localhost/litecart/admin/?app=catalog&doc=catalog";
-        //_gson("General", "src/test/resources/addNewPoduct.json");
         for (String tab : Arrays.asList(new String[]{"General","Information", "Prices"})) {
             tabsFields.put(tab,_gson(tab, "src/test/resources/addNewPoduct.json"));
         }
@@ -31,7 +31,6 @@ public class Task12 extends Testt {
     @Override
     @BeforeAll
     public void start() {
-        //super.start();
         driver = new FirefoxDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get(baseURL);
@@ -43,6 +42,8 @@ public class Task12 extends Testt {
     }
 
     @Test
+    @DisplayName("Button \"Add New Product\"")
+    @Order(1)
     public void canGoAddProductPage() {
         for (WebElement a : driver.findElement(By.id("content")).findElement(By.cssSelector("div[style='float: right;']")).findElements(By.tagName("a"))) {
             if (a.getText().equals("Add New Product")) {
@@ -51,12 +52,38 @@ public class Task12 extends Testt {
             }
         }
         assertTrue(wait.until(titleContains("Add New Product | My Store")));
-        _fillFields();
-        driver.findElement(By.name("save")).click();
     }
-    /*String nameOfClass = stringClassName;
-    Class classForName = Class.forName(nameOfClass);
-    TargetClass targetClassObject = (TargetClass) classForName.newInstance();*/
+
+    @Nested
+    @DisplayName("Adding a product")
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class AddProduct {
+        @Test
+        @DisplayName("New product added")
+        @Order(2)
+        public void addProduct() {
+            if (!driver.getCurrentUrl().equals(
+                    "http://localhost/litecart/admin/?category_id=1&app=catalog&doc=edit_product"
+            )) {
+                driver.get("http://localhost/litecart/admin/?category_id=1&app=catalog&doc=edit_product");
+            }
+            _fillFields();
+            driver.findElement(By.name("save")).click();
+            assertTrue(wait.until(titleContains("Catalog | My Store")));
+        }
+
+        @Test
+        @DisplayName("Added product in the catalog")
+        @Order(3)
+        public void searchAddedProduct() {
+            assertNotNull(wait.until(
+                    (WebDriver d) -> {
+                        WebElement root = driver.findElement(By.className("dataTable"));
+                        return root.findElement(By.linkText("My Duck"));
+                    }
+            ));
+        }
+    }
 
     private void _fillFields() {
         WebElement a;
