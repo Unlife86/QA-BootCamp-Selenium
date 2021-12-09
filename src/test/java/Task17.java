@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Task17 extends Testt {
     private String url = "http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1";
 
@@ -28,6 +26,7 @@ public class Task17 extends Testt {
 
     @Test
     @DisplayName("Login")
+    @Order(1)
     public void canLogin() {
         _login();
         assertEquals(0,driver.manage().logs().get("browser").getAll().size());
@@ -35,6 +34,7 @@ public class Task17 extends Testt {
 
     @Test
     @DisplayName("The category page is open")
+    @Order(2)
     public void goToCategory() {
         driver.get(url);
         if (isLogined()) {
@@ -56,6 +56,7 @@ public class Task17 extends Testt {
     }
 
     @TestFactory
+    @Order(3)
     public Collection<DynamicTest> clickOnProducts() {
         List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
         String xpath = "[not(self::node()[@title='Edit'])]/../../following-sibling::*[1]/self::tr//a[contains(@href,'edit_product')][not(self::node()[@title='Edit'])]";
