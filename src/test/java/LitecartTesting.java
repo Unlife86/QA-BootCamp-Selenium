@@ -11,13 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LitecartTesting extends Testt {
 
-    private void _login() {
-        driver.get(baseURL);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
-    }
-
     private boolean _isElementPresent(By by) {
         try {
             driver.findElement(by);

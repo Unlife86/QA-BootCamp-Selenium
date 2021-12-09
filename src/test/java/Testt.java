@@ -40,6 +40,13 @@ public class Testt {
         driver = null;
     }
 
+    protected void _login() {
+        driver.get(baseURL);
+        driver.findElement(By.name("username")).sendKeys("admin");
+        driver.findElement(By.name("password")).sendKeys("admin");
+        driver.findElement(By.name("login")).click();
+    }
+
     protected Map<String,Map<String,String>> _gson(String key, String fileName) throws FileNotFoundException, IOException {
         Path path = Paths.get(fileName);
         JsonElement tree = null;
