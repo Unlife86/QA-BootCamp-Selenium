@@ -19,12 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Task10 extends Task1 {
 
     public Task10() {
-        baseURL = "http://localhost/litecart/en/";
-        List<WebDriver> drivers = Arrays.asList(
-                new ChromeDriver(),
-                new FirefoxDriver(),
-                new EdgeDriver()
-        );
+        baseURL = "https://litecart.stqa.ru/en/";//"http://localhost/litecart/en/";
+
+        /*drivers.add(new ChromeDriver());
+        drivers.add(new FirefoxDriver());*/
+        drivers.add(new EdgeDriver());
     }
 
     @Override
@@ -78,15 +77,16 @@ public class Task10 extends Task1 {
         protected DynamicTest _lambaDynamicTests(final int i, final String val, final String text) {
             List<String> color = Arrays.asList(new String[]{
                     String.format(
-                            "^%s,%s,%s,",
+                            "^%s,%s,%s",
                             val.split(",")[0],
                             val.split(",")[0],
                             val.split(",")[0]
                     ),
-                    "^\\d{1,3},0,0,"
+                    "^\\d{1,3},0,0"
             });
             Pattern pattern = Pattern.compile(color.get(i));
             Matcher matcher = pattern.matcher(val);
+            System.out.println(color.get(i));
             System.out.println(val);
             return DynamicTest.dynamicTest(
                     driver.getClass().getSimpleName()+": Color text."+ text,

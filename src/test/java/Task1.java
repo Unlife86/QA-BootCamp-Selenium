@@ -16,13 +16,15 @@ import static  org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 public class Task1 /*extends Testt implements Runnable*/ {
     public Task1() {
         baseURL = "https://search.maven.org/";
+        drivers.add(new ChromeDriver());
+        drivers.add(new FirefoxDriver());
     }
     /*private Thread chrome;
     private Thread firefox;*/
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
-    protected List<WebDriver> drivers = Arrays.asList(new ChromeDriver(), new FirefoxDriver());
+    protected List<WebDriver> drivers = new ArrayList<>();
     protected List<ThreadLocalDriver> threadsLocal = new ArrayList<ThreadLocalDriver>();
     protected List<Thread> threads = new ArrayList<Thread>();
     protected String baseURL;
