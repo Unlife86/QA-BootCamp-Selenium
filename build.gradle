@@ -13,8 +13,8 @@ dependencies {
     //implementation 'junit:junit:4.13.2'
     implementation 'org.seleniumhq.selenium:selenium-java:4.0.0'
     implementation 'com.google.code.gson:gson:2.7'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation 'net.andreinc:mockneat:0.4.7'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    implementation 'net.andreinc:mockneat:0.4.7'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
