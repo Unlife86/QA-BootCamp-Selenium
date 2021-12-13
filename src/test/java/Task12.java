@@ -20,12 +20,15 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Task12 extends Testt {
     private Map<String,Map<String,Map<String,String>>> tabsFields = new HashMap<String,Map<String,Map<String,String>>>();
-
+    private String name;
     public Task12() throws FileNotFoundException, IOException {
+
         baseURL = "http://localhost/litecart/admin/?app=catalog&doc=catalog";
         for (String tab : Arrays.asList(new String[]{"General","Information", "Prices"})) {
             tabsFields.put(tab,_gson(tab, "src/test/resources/addNewPoduct.json"));
         }
+        name = tabsFields.get("General").get("Name").getOrDefault("value", "My Duck") + "-" + String.valueOf(System.currentTimeMillis());
+        tabsFields.get("General").get("Name").put("value",name);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class Task12 extends Testt {
             assertNotNull(wait.until(
                     (WebDriver d) -> {
                         WebElement root = driver.findElement(By.className("dataTable"));
-                        return root.findElement(By.linkText("My Duck"));
+                        return root.findElement(By.linkText(name));
                     }
             ));
         }
@@ -122,6 +125,8 @@ public class Task12 extends Testt {
                     }
                 }
                 break;
+            /*case "Name":
+                root.findElement(By.xpath(map.get("xpath"))).sendKeys());*/
             case "Categories":
                 root.findElement(By.xpath("..//input[@data-name='Root']")).click();
                 root.findElement(by).click();
@@ -157,12 +162,5 @@ public class Task12 extends Testt {
 
                 }
         }
-
     }
-
-
-
-
-
-
 }
