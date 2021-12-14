@@ -27,15 +27,15 @@ public class SelectLiteCart extends Select {
         return -1;
     }
 
-    public void _setOption(WebDriver driver, WebElement element, String optionText) {
-        _setOption(driver, element,String.format(js,_getIndexOptionByText(this.getOptions(),optionText)));
+    public void _setOption(WebDriver driver, String optionText) {
+        _setOption(driver,String.format(js,_getIndexOptionByText(this.getOptions(),optionText)));
     }
 
-    public void _setOption(WebDriver driver, WebElement element) {
-        _setOption(driver, element,Helper._getRandomNumber(1,this.getOptions().size()) - 1);
+    public void _setOption(WebDriver driver) {
+        _setOption(driver,Helper._getRandomNumber(1,this.getOptions().size()) - 1);
     }
 
-    public void _setOption(WebDriver driver, WebElement element, Integer index) {
+    public void _setOption(WebDriver driver, Integer index) {
         try {
             this.selectByIndex(index);
         } catch (ElementNotInteractableException e) {
