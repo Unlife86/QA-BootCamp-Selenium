@@ -1,7 +1,7 @@
-package litecart.test.pages;
+package litecart.pages;
 
-import litecart.test.AppInterface;
-import litecart.test.PageInterface;
+import litecart.AppInterface;
+import litecart.PageInterface;
 import org.openqa.selenium.By;
 
 public class IndexPage extends PageInterface {

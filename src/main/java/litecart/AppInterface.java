@@ -1,8 +1,7 @@
-package litecart.test;
+package litecart;
 
 import helpers.Helper;
-import litecart.test.pages.IndexPage;
-import org.junit.jupiter.api.AfterAll;
+import litecart.pages.IndexPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

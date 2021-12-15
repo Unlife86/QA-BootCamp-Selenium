@@ -1,17 +1,13 @@
 import helpers.DynamicTests;
-import litecart.test.AppInterface;
-import litecart.test.Main;
-import litecart.test.pages.CartPage;
-import litecart.test.pages.IndexPage;
-import litecart.test.pages.ProductPage;
+import litecart.AppInterface;
+import litecart.Main;
+import litecart.pages.CartPage;
+import litecart.pages.ProductPage;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.openqa.selenium.support.ui.ExpectedConditions.stalenessOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

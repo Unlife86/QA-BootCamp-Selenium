@@ -1,6 +1,4 @@
-package litecart.test;
-
-import org.openqa.selenium.WebDriver;
+package litecart;
 
 public abstract class PageInterface {
 

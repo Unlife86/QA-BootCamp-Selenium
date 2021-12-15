@@ -1,14 +1,10 @@
-package litecart.test.pages;
+package litecart.pages;
 
-import litecart.test.AppInterface;
-import litecart.test.PageInterface;
-import org.junit.jupiter.api.DynamicTest;
+import litecart.AppInterface;
+import litecart.PageInterface;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.util.Collection;
-import java.util.List;
 
 public class CartPage extends PageInterface {
 

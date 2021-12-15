@@ -1,7 +1,6 @@
-package litecart.test.pages;
+package litecart.pages;
 
-import litecart.test.LoginInterface;
-import litecart.test.PageInterface;
+import litecart.LoginInterface;
 import org.openqa.selenium.By;
 
 public class LoginPage implements LoginInterface {

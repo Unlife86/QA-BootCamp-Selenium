@@ -1,4 +1,4 @@
-package litecart.test;
+package litecart;
 
 import org.openqa.selenium.By;
 
