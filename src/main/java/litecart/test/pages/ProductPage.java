@@ -32,8 +32,6 @@ public class ProductPage extends PageInterface {
         } catch (NoSuchElementException e) {
         } finally {
             app.getElement(By.name("add_cart_product")).click();
-            app.alertIsPresentAccept();
-            app.getDriver().navigate().refresh();
         }
     }
 

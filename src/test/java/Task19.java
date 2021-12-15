@@ -21,7 +21,7 @@ public class Task19 {
     AppInterface app;
 
     public Task19() {
-        app = new Main();//"https://litecart.stqa.ru/en/");
+        app = new Main("https://litecart.stqa.ru/en/");
     }
 
     @RepeatedTest(value = 3, name= "{displayName}: {currentRepetition} of {totalRepetitions}")
