@@ -1,7 +1,7 @@
 package litecart.pages;
 
-import litecart.AppInterface;
-import litecart.PageInterface;
+import litecart.interfaces.AppInterface;
+import litecart.interfaces.PageInterface;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

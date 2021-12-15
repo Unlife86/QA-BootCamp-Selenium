@@ -1,5 +1,5 @@
 import helpers.DynamicTests;
-import litecart.AppInterface;
+import litecart.interfaces.AppInterface;
 import litecart.Main;
 import litecart.pages.CartPage;
 import litecart.pages.ProductPage;

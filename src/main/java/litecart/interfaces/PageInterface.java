@@ -1,4 +1,4 @@
-package litecart;
+package litecart.interfaces;
 
 public abstract class PageInterface {
 

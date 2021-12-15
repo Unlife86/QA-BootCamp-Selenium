@@ -1,8 +1,8 @@
 package litecart.pages;
 
 import helpers.SelectLiteCart;
-import litecart.AppInterface;
-import litecart.PageInterface;
+import litecart.interfaces.AppInterface;
+import litecart.interfaces.PageInterface;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;

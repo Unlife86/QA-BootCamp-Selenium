@@ -1,5 +1,7 @@
 package litecart;
 
+import litecart.interfaces.AppInterface;
+import litecart.interfaces.LoginInterface;
 import litecart.pages.IndexPage;
 import litecart.pages.LoginPage;
 import org.openqa.selenium.*;

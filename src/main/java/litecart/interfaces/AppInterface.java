@@ -1,4 +1,4 @@
-package litecart;
+package litecart.interfaces;
 
 import helpers.Helper;
 import litecart.pages.IndexPage;
