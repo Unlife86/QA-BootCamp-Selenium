@@ -32,7 +32,9 @@ public class SelectLiteCart extends Select {
     }
 
     public void _setOption(WebDriver driver) {
-        _setOption(driver,Helper._getRandomNumber(1,this.getOptions().size()) - 1);
+        Integer index = Helper._getRandomNumber(1,this.getOptions().size()) - 1;
+        if (this.getOptions().get(index).getText().equals("-- Select --")) index += Helper._getRandomNumber(2,this.getOptions().size()) - 1;
+        _setOption(driver,index);
     }
 
     public void _setOption(WebDriver driver, Integer index) {

@@ -18,4 +18,9 @@ public class IndexPage extends PageInterface {
         return new ProductPage(app);
     }
 
+    public CartPage goToCartPage() {
+        app.getElement(By.cssSelector("#cart .link")).click();
+        return new CartPage(app);
+    }
+
 }

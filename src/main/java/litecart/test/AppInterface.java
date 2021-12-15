@@ -6,9 +6,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
 public abstract class AppInterface {
 
@@ -43,6 +46,18 @@ public abstract class AppInterface {
 
     public WebElement getRandomElementBy(List<WebElement> elements) {
         return elements.get(Helper._getRandomNumber(0,elements.size()));
+    }
+
+    public Boolean visibilityOfElementLocated(By by) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(by)) != null;
+    }
+
+    public void alertIsPresentAccept() {
+        wait.until(alertIsPresent()).accept();
+    }
+
+    public Boolean stalenessOf(WebElement element) {
+        return wait.until(ExpectedConditions.stalenessOf(element));
     }
 
     public void stop() {

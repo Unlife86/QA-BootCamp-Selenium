@@ -15,7 +15,10 @@ public class ProductPage extends PageInterface {
     }
 
     private Boolean hasOptions;
+
     private By select = By.name("options[Size]");
+
+    private By cart = By.cssSelector("#cart .content .quantity");
 
     private void _setOption() {
         if (hasOptions) {
@@ -29,11 +32,17 @@ public class ProductPage extends PageInterface {
         } catch (NoSuchElementException e) {
         } finally {
             app.getElement(By.name("add_cart_product")).click();
+            app.alertIsPresentAccept();
+            app.getDriver().navigate().refresh();
         }
     }
 
     public WebElement getCart() {
-        return app.getElement(By.cssSelector("#cart .content .quantity"));
+        return app.getElement(cart);
+    }
+
+    public Integer getCountInCart() {
+        return Integer.parseInt(getCart().getText());
     }
 
 

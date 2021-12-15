@@ -5,6 +5,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,15 +19,19 @@ public class DynamicTests {
 
     private List<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
 
-    /*protected void _dynamicTests() {
-        dynamicTests.add(
-                _lambaDynamicTests();
-        );
-    }*/
+    public Collection<DynamicTest> getDynamicTests() {
+        return dynamicTests;
+    }
 
-    protected DynamicTest _lambaDynamicTests(String displayName, Executable executable) {
+    public void dynamicTests(String displayName, Executable executable) {
+        dynamicTests.add(
+                _lambaDynamicTests(displayName,executable)
+        );
+    }
+
+    private DynamicTest _lambaDynamicTests(String displayName, Executable executable) {
         return DynamicTest.dynamicTest(
-                driver.getClass().getSimpleName(),
+                displayName,
                 executable
         );
     }
