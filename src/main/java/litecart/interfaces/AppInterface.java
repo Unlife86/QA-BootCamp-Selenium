@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 
 public abstract class AppInterface {
 
@@ -57,6 +58,10 @@ public abstract class AppInterface {
 
     public Boolean stalenessOf(WebElement element) {
         return wait.until(ExpectedConditions.stalenessOf(element));
+    }
+
+    public Boolean textToBePresentInElement (WebElement element, String text) {
+        return wait.until(ExpectedConditions.textToBePresentInElement(element, text));
     }
 
     public void stop() {

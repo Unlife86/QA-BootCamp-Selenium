@@ -26,10 +26,10 @@ public class Task19 {
     public void cartAddProduct(RepetitionInfo repetitionInfo) {
         ProductPage productPage = app.open().goToProductPage();
         productPage.cartAddProduct();
-        assertTrue(app.getWait().until(textToBePresentInElement(
-                productPage.getCart(),
-                String.valueOf(repetitionInfo.getCurrentRepetition())
-        )));
+        assertTrue(
+            app.textToBePresentInElement(productPage.getCart(),
+            String.valueOf(repetitionInfo.getCurrentRepetition()))
+        );
     }
 
     @TestFactory

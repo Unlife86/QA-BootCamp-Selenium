@@ -16,6 +16,9 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     implementation 'net.andreinc:mockneat:0.4.7'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'io.cucumber:cucumber-java8:7.0.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.0.0'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
 }
 
 test {
