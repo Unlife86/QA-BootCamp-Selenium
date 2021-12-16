@@ -15,27 +15,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Task20Stepdefs implements En {
-    public static AppInterface getApp() {
-        return app;
+
+    private static AppInterface app = new Main("https://litecart.stqa.ru/en/");
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {app.stop();}));
     }
 
-    static AppInterface app;
     private ProductPage productPage;
     private IndexPage indexPage;
     private CartPage cartPage;
 
-    @BeforeAll
-    public static void beforeAll() {
-        Task20Stepdefs.app = new Main();
-    }
-
     public Task20Stepdefs() {
-        /*Before(() -> {
-            app = new Main();//"https://litecart.stqa.ru/en/");
-        });*/
-
         Given("Open index page", () -> {
-            indexPage = Task20Stepdefs.app.open();
+            indexPage = app.open();
         });
         When("Open random product page", () -> {
             productPage = indexPage.goToProductPage();
@@ -44,14 +37,14 @@ public class Task20Stepdefs implements En {
             productPage.cartAddProduct();
         });
         Then("The number of products in the basket is {string}", (String count) -> {
-            assertTrue(Task20Stepdefs.app.textToBePresentInElement(productPage.getCart(), count));
+            assertTrue(app.textToBePresentInElement(productPage.getCart(), count));
         });
 
         When("Open cart page", () -> {
             cartPage = indexPage.goToCartPage();
         });
         Then("Product count is {string}", (String count) -> {
-            assertEquals(String.valueOf(cartPage.getCount()), Integer.parseInt(count));
+            assertEquals(String.valueOf(cartPage.getCount()), count);
         });
         When("Delete one the product from the cart", () -> {
             cartPage.removeProduct();
@@ -62,14 +55,5 @@ public class Task20Stepdefs implements En {
         Then("Table Is Staleness Of", () -> {
             assertTrue(cartPage.tableIsStalenessOf());
         });
-
-        /*After(() -> {
-            app.stop();
-        });*/
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        Task20Stepdefs.app.stop();
     }
 }
